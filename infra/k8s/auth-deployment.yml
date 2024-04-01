@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: auth # Selector helps to find the pods the deployment creates
   template:
     metadata:
       labels:
-        app: auth
+        app: auth # Label gets applied to the pod
     spec:
       containers:
         - name: auth
