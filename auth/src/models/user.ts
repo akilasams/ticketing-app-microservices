@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Password from "../services/password";
+import PasswordManager from "../services/password-manager";
 
 // An interface that describes the properties that are required to create a new user
 interface UserAttrs {
@@ -50,7 +50,7 @@ userSchema.pre("save", async function (done) {
   // function keyword gives access to the document being saved as 'this', arrow fn would override 'this' to be equal to the context of the file
   if (this.isModified("password")) {
     // User.build({email: "test@test.com", password: "dkfjdkf"}) will mark password as modified
-    const hashed = await Password.toHash(this.get("password"));
+    const hashed = await PasswordManager.toHash(this.get("password"));
     this.set("password", hashed);
   }
   done(); // Done all the async work to do
