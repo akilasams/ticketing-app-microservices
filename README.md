@@ -1,14 +1,21 @@
-# Ho to Run
+# Development Setup Guide
 
-## Install Minikube
+## Install Minikube & Run
 
 - Follow the instructions in the [video](https://www.youtube.com/watch?v=xNefZ51jHKg)
+- After successful installation, run docker and execute the below command to start minikube service
 
-## Change host file content
+```shell
+minikube start
+```
+
+- For more info visit [docs](https://minikube.sigs.k8s.io/docs/)
+
+## Change Host File Content & Tunnel
 
 - Host file location in Windows : C:\Windows\System32\drivers\etc\hosts
-- Add the below lines to the bottom of the file
-  `127.0.0.1 ticketing.dev`
+- Add this line to the bottom of the file to redirect all requests sent to ticketing.dev to localhost : `127.0.0.1 ticketing.dev`
+- Run the below command to redirect sent to cluster ip of the minikube container to
 
 ## Creating K8 Secrets
 
