@@ -9,11 +9,18 @@ spec:
   rules:
     - host: ticketing.dev
       http:
-        paths:
+        paths: # Attempts to match the paths in the path order
           - path: /api/users/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-service
+                port:
+                  number: 3000
+          - path: /?(.*) # Catch all paths, therefore at the bottom
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: client-service
                 port:
                   number: 3000

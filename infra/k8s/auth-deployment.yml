@@ -3,11 +3,11 @@ kind: Deployment
 metadata:
   name: auth-deployment
 spec:
-  replicas: 1
+  replicas: 1 # 1 single pod
   selector:
     matchLabels:
       app: auth # Selector helps to find the pods the deployment creates
-  template:
+  template: # Describes how every pod created and managed by this deployment should behave
     metadata:
       labels:
         app: auth # Label gets applied to the pod
@@ -22,6 +22,7 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
 ---
+# Cluster IP service
 apiVersion: v1
 kind: Service
 metadata:
