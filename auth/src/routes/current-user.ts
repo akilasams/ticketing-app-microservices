@@ -1,7 +1,6 @@
 import express from "express";
 
-import currentUser from "../middlewares/curent-user";
-import requireAuth from "../middlewares/require-auth";
+import { currentUser } from "@akilaticketstest/common";
 
 const router = express.Router();
 
