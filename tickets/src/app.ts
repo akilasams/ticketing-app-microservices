@@ -6,9 +6,11 @@ import {
   errorHandler,
   NotFoundError,
   currentUser,
-  requireAuth,
 } from "@akilaticketstest/common";
 import { createTicketRouter } from "./routes/new";
+import { showTicketRouter } from "./routes/show";
+import { getTicketsRouter } from "./routes/get";
+import { updateTicketRouter } from "./routes/update";
 
 const app = express();
 app.set("trust proxy", true); // Traffic is being proxied to the app thrugh ingress nginx, to make express aware that its behind a proxy
@@ -23,6 +25,9 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(getTicketsRouter);
+app.use(updateTicketRouter);
 
 // Send a 404 if route doesnt exist
 app.all("*", async () => {
