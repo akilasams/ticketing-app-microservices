@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: tickets-deployment
 spec:
   replicas: 1 # 1 single pod
   selector:
     matchLabels:
-      app: auth # Selector helps to find the pods the deployment creates
+      app: tickets # Selector helps to find the pods the deployment creates
   template: # Describes how every pod created and managed by this deployment should behave
     metadata:
       labels:
-        app: auth # Label gets applied to the pod
+        app: tickets # Label gets applied to the pod
     spec:
       containers:
-        - name: auth
-          image: akila97/auth
+        - name: tickets
+          image: akila97/tickets
           env:
             - name: MONGO_URI
               value: mongodb://tickets-mongo-service:27017/tickets
@@ -28,12 +28,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: tickets-service
 spec:
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000

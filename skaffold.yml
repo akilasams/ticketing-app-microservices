@@ -7,7 +7,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: akila97/auth
+    - image: akila97/auth # Skaffold tries to pull images frokm docker hub, thats why we have to push the images when running the app
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -22,4 +22,12 @@ build:
       sync:
         manual:
           - src: "**/*.(js|jsx)"
+            dest: .
+    - image: akila97/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
             dest: .

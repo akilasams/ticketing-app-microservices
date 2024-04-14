@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Pre-Save Hook
+// Pre-Save Hook to hash password
 userSchema.pre("save", async function (done) {
   // function keyword gives access to the document being saved as 'this', arrow fn would override 'this' to be equal to the context of the file
   if (this.isModified("password")) {
@@ -70,7 +70,7 @@ const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 export default User;
 
 /*
----- Generics Syntac : <> ----
+---- Generics Syntax : <> ----
     - Acts as functions for types
     - const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
     - Think as <UserDoc, UserModel> are arguments for the function model
