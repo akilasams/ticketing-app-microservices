@@ -9,6 +9,12 @@
 minikube start
 ```
 
+- Use the below command to tunnel something something
+
+```shell
+minikube tunnel
+```
+
 - For more info visit [docs](https://minikube.sigs.k8s.io/docs/)
 
 ## Change Host File Content & Tunnel
@@ -29,4 +35,23 @@ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
 
 ```shell
 kubectl get secrets
+```
+
+## Run All Services Using Skaffold
+
+```shell
+skaffold dev
+```
+
+- If stopping skaffold doesn't clean up the pods, delete them manually using the below command and check if all the pods are deleted.
+
+```shell
+skaffold delete # Delete pods
+kubectl get pods # See if running
+```
+
+## Port Forwarding Command to Create a Temporary Connection to a Pod
+
+```shell
+kubectl port-forward <pod_name> <port_no_in_local_machine>:<port_no_in_pod>
 ```
