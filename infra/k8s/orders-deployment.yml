@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-deployment
+spec:
+  replicas: 1 # 1 single pod
+  selector:
+    matchLabels:
+      app: orders # Selector helps to find the pods the deployment creates
+  template: # Describes how every pod created and managed by this deployment should behave
+    metadata:
+      labels:
+        app: orders # Label gets applied to the pod
+    spec:
+      containers:
+        - name: orders
+          image: akila97/orders
+          env:
+            - name: MONGO_URI
+              value: mongodb://orders-mongo-service:27017/orders
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: NATS_URL
+              value: http://nats-service:4222
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+# Cluster IP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-service
+spec:
+  selector:
+    app: orders
+  ports:
+    - name: orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
