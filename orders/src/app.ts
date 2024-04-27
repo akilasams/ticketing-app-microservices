@@ -10,7 +10,7 @@ import {
 import { createOrderRouter } from "./routes/new";
 import { showOrdersRouter } from "./routes/show";
 import { getOrdersRouter } from "./routes/get";
-import { deleteOrderRouter } from "./routes/delete";
+import { cancelOrderRouter } from "./routes/cancel";
 
 const app = express();
 app.set("trust proxy", true); // Traffic is being proxied to the app thrugh ingress nginx, to make express aware that its behind a proxy
@@ -27,7 +27,7 @@ app.use(currentUser);
 app.use(createOrderRouter);
 app.use(showOrdersRouter);
 app.use(getOrdersRouter);
-app.use(deleteOrderRouter);
+app.use(cancelOrderRouter);
 
 // Send a 404 if route doesnt exist
 app.all("*", async () => {

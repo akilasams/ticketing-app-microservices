@@ -9,9 +9,11 @@ import {
 } from "@akilaticketstest/common";
 import { body } from "express-validator";
 import Ticket from "../models/ticket";
-import Order from "../models/order";
+import { Order } from "../models/order";
 
 const router = express.Router();
+
+const EXPIRATION_WINDOW_SECONDS = 5 * 60; // 5 Mins expiration time
 
 router.post(
   "/api/orders",
@@ -33,29 +35,26 @@ router.post(
 
     if (!ticket) throw new NotFoundError();
 
-    // Make sure that the ticket is not already reserved
-    // Run query to look at all orders. Find an order where the ticket is the ticket we just found and the orderStatus != cancelled
-    // If we find an order under this criteria -> ticket is reserved
-    const existingOrder = await Order.findOne({
-      ticket: ticket,
-      status: {
-        $in: [
-          OrderStatus.Created,
-          OrderStatus.AwaitingPayment,
-          OrderStatus.Complete,
-        ],
-      },
-    });
+    const isReserved = await ticket.isReserved();
 
-    if (existingOrder) throw new BadRequestError("Ticket is already reserved");
+    if (isReserved) throw new BadRequestError("Ticket is already reserved");
 
     // Calculate an expiration date for this order
+    const expiration = new Date();
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
     // Build the order and save it to the DB
+    const order = Order.build({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      ticket,
+    });
+    await order.save();
 
     // Publish an event saying that an order was created
 
-    res.send({});
+    res.status(201).send(order);
   }
 );
 

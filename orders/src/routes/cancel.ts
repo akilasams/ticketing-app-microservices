@@ -4,22 +4,29 @@ import {
   NotFoundError,
   requireAuth,
 } from "@akilaticketstest/common";
-import { Order } from "../models/order";
+import { Order, OrderStatus } from "../models/order";
 
 const router = express.Router();
 
-router.get(
+router.put(
   "/api/orders/:orderId",
   requireAuth,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId).populate("ticket");
+    const { orderId } = req.params;
+
+    const order = await Order.findById(orderId);
 
     if (!order) throw new NotFoundError();
 
     if (order.userId !== req.currentUser!.id) throw new NotAuthorizedError();
 
+    order.status = OrderStatus.Cancelled;
+    await order.save();
+
+    // Publish an evnt saying the order was cancelled
+
     res.send(order);
   }
 );
 
-export { router as showOrdersRouter };
+export { router as cancelOrderRouter };
