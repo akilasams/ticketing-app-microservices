@@ -28,6 +28,7 @@ router.put(
     // Publish an evnt saying the order was cancelled
     new OrderCancelledPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: order.__v,
       ticket: {
         id: order.ticket.id,
       },
